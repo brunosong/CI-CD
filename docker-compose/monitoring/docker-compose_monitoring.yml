@@ -7,12 +7,23 @@ services:
     image: prom/prometheus
     restart: on-failure
     volumes: 
-      - prometheus_home:/var/prometheus_home
+      - prometheus_home:/etc/prometheus
     ports:
       - 9090:9090
     networks:
       monitoring-network:
         ipv4_address: 172.30.0.10
+
+  pushgateway:
+    container_name: pushgateway
+    image: prom/pushgateway
+    restart: on-failure
+    ports:
+      - 9091:9091
+    networks:
+      monitoring-network:
+        ipv4_address: 172.30.0.15
+
 
 volumes: 
   prometheus_home:
@@ -27,4 +38,4 @@ networks:
           gateway: 172.30.0.1
 
 
-# COMMAND : docker-compose -f docker-compose_monitoring.yml up
+# COMMAND : docker-compose -d -f docker-compose_monitoring.yml up -d
