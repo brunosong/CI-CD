@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+
+  jenkins-node1:
+    container_name: jenkins-node1
+    image: edowon0623/docker:latest
+    restart: on-failure
+    privileged: true
+    stdin_open: true # -i
+    tty: true # -t
+    cgroup: host
+    volumes: 
+      - /sys/fs/cgroup:/sys/fs/cgroup
+    ports: 
+      - "30022:22"
+    command: 
+      - /usr/sbin/init
+    environment:
+      - container=docker
+    networks:
+      brunosong-network:
+        ipv4_address: 172.20.0.13
+
+networks:
+  brunosong-network:
+    external: true

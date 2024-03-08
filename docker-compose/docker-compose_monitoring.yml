@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    restart: on-failure
+    volumes: 
+      - prometheus_home:/var/prometheus_home
+    ports:
+      - 9090:9090
+    networks:
+      monitoring-network:
+        ipv4_address: 172.30.0.10
+
+volumes: 
+  prometheus_home:
+    external: true
+
+networks:
+  monitoring-network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.30.0.0/16
+          gateway: 172.30.0.1
+
+
+# COMMAND : docker-compose -f docker-compose_monitoring.yml up

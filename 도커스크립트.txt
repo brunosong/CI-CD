@@ -1,0 +1,40 @@
+//앤서블 도커 (인프런강사꺼 사용)
+docker pull edowon0623/ansible
+
+//앤서블 도커 실행
+docker run --privileged \
+--name ansible-server -itd \
+-p 20022:22 -p 8081:8080 \
+-e container=docker \
+-v /sys/fs/cgroup:/sys/fs/cgroup \
+edowon0623/ansible:latest /usr/sbin/init
+//윈도우
+docker run --privileged --name ansible-server -itd -p 20022:22 -p 8081:8080 -e container=docker -v /sys/fs/cgroup:/sys/fs/cgroup edowon0623/ansible:latest /usr/sbin/init
+
+//도커서버 실행
+docker run --privileged --name docker-server -itd -p 10022:22 -p 8082:8080 -e container=docker -v /sys/fs/cgroup:/sys/fs/cgroup edowon0623/docker /usr/sbin/init
+
+
+//소나큐브 실행
+docker run --rm -p 9000:9000 --name sonarqube sonarqube
+
+//다큐먼트
+https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/scanners/sonarscanner-for-maven/
+token : squ_de0709895f4698f87502aba7a7a79ae7f6abbc4d
+
+
+//젠킨스 노드 추가
+docker run 
+--privileged 
+--name jenkins-node1
+-itd 
+-p 30022:22
+-e container=docker 
+-v /sys/fs/cgroup:/sys/fs/cgroup
+--cgroupns=host
+edowon0623/docker:latest /usr/sbin/init
+
+
+
+
+

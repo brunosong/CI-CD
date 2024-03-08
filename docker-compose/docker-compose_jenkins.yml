@@ -1,0 +1,107 @@
+version: '3'
+
+services:
+
+  jenkins:
+    container_name: jenkins
+    image: jenkins/jenkins:latest
+    restart: on-failure 
+    volumes: 
+      - jenkins_home:/var/jenkins_home
+    ports: 
+      - "5050:5050"
+      - "8080:8080"
+    networks:
+      brunosong-network:
+        ipv4_address: 172.20.0.10
+  
+  docker-server:
+    container_name: docker-server
+    image: edowon0623/docker
+    restart: on-failure
+    privileged: true
+    stdin_open: true # -i
+    tty: true # -t
+    volumes: 
+      - /sys/fs/cgroup:/sys/fs/cgroup
+    ports: 
+      - "10022:22"
+      - "8082:8080"
+    command: 
+      - /usr/sbin/init
+      # 추후 여기에 systemctl 명령을 날릴 수 있는지 확인
+    environment:
+      - container=docker
+    networks:
+      brunosong-network:
+        ipv4_address: 172.20.0.11
+
+  ansible-server:
+    container_name: ansible-server
+    image: edowon0623/ansible:latest
+    restart: on-failure
+    privileged: true
+    stdin_open: true # -i
+    tty: true # -t
+    volumes: 
+      - /sys/fs/cgroup:/sys/fs/cgroup
+    ports: 
+      - "20022:22"
+      - "8081:8080"
+    command: 
+      - /usr/sbin/init
+    environment:
+      - container=docker
+    networks:
+      brunosong-network:
+        ipv4_address: 172.20.0.12
+
+  sonarqube:
+    container_name: sonarqube
+    image: sonarqube
+    restart: on-failure
+    ports: 
+      - "9000:9000"
+    networks:
+      brunosong-network:
+        ipv4_address: 172.20.0.20
+
+  jenkins-node1:
+    container_name: jenkins-node1
+    image: edowon0623/docker:latest
+    restart: on-failure
+    privileged: true
+    stdin_open: true # -i
+    tty: true # -t
+    volumes: 
+      - /sys/fs/cgroup:/sys/fs/cgroup
+    ports: 
+      - "10022:22"
+      - "8082:8080"
+    command: 
+      - /usr/sbin/init
+      # 추후 여기에 systemctl 명령을 날릴 수 있는지 확인
+    environment:
+      - container=docker
+    networks:
+      brunosong-network:
+        ipv4_address: 172.20.0.13
+
+volumes: 
+  jenkins_home:
+    external: true
+
+# 외부(도커 네트워크) 사용
+networks:
+  brunosong-network:
+    external: true
+
+
+# 임시로 뜨는 네트워크 생성
+# networks:
+#   brunosong-network:
+#     ipam:
+#       driver: default
+#       config:
+#         - subnet: 172.26.0.0/16
+#           gateway: 172.26.0.1
