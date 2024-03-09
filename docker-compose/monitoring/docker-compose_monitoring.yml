@@ -4,10 +4,11 @@ services:
 
   prometheus:
     container_name: prometheus
-    image: prom/prometheus
+    build:
+      context: .
+      dockerfile: Dockerfile_prom
+    image: brunosong-prom
     restart: on-failure
-    volumes: 
-      - prometheus_home:/etc/prometheus
     ports:
       - 9090:9090
     networks:
@@ -24,7 +25,6 @@ services:
       monitoring-network:
         ipv4_address: 172.30.0.15
 
-
 volumes: 
   prometheus_home:
     external: true
@@ -38,4 +38,5 @@ networks:
           gateway: 172.30.0.1
 
 
-# COMMAND : docker-compose -d -f docker-compose_monitoring.yml up -d
+# START : docker-compose -d -f docker-compose_monitoring.yml up -d
+# STOP : docker-compose -f .\docker-compose_monitoring.yml down
