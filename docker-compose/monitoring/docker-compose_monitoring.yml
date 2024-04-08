@@ -38,5 +38,5 @@ networks:
           gateway: 172.30.0.1
 
 
-# START : docker-compose -d -f docker-compose_monitoring.yml up -d
+# START : docker-compose -f docker-compose_monitoring.yml up -d
 # STOP : docker-compose -f .\docker-compose_monitoring.yml down
