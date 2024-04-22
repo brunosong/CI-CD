@@ -1,0 +1,44 @@
+version: '3.1'
+
+services:
+
+  mysql-master:
+    container_name: mysql-master
+    image: mysql:8.0
+    restart: always
+    ports: 
+      - "3306:3306"
+    # CONF 파일이 777로 가는 문제를 해결해야 함  
+    volumes:
+      - ${MASTER_INIT_PATH}:/docker-entrypoint-initdb.d
+      - ${MASTER_CONFIG_PATH}:/etc/mysql/conf.d
+      - ${MOUNT_PATH}/master/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=test1234
+      - MYSQL_USER=brunosong
+      - MYSQL_PASSWORD=test1234
+    command: 
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+
+  mysql-slave1:
+    container_name: mysql-slave1
+    image: mysql:8.0
+    restart: always
+    depends_on:
+      - mysql-master
+    ports: 
+      - "3307:3306"
+    volumes:
+      - ${SLAVE_INIT_PATH}:/docker-entrypoint-initdb.d
+      - ${SLAVE_CONFIG_PATH}:/etc/mysql/conf.d
+      - ${MOUNT_PATH}/slave/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=test1234
+      - MYSQL_USER=brunosong
+      - MYSQL_PASSWORD=test1234
+    command: 
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+        
+    
