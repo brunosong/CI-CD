@@ -4,11 +4,11 @@ filebeat.inputs:
     paths:
       - /logs/host/server-log*
 
-processors:
-  - add_cloud_metadata: ~
-  - add_docker_metadata: ~
-
 output.elasticsearch:
   hosts: '${ELASTICSEARCH_HOSTS:elasticsearch:9200}'
   username: '${ELASTICSEARCH_USERNAME:}'
   password: '${ELASTICSEARCH_PASSWORD:}'
+#  index: "filebeat-loggen-%{[agent.version]}-%{+yyyy.MM.dd}"
+
+#setup.kibana.host: '${KIBANA_HOSTS:kibana:5601}'
+
