@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+
+  rabbitmq:
+    image: rabbitmq
+    container_name: rabbitmq
+    hostname: bruno-rabbit
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  config-service:
+    image: airtrack1234/config-service
+    container_name: config-service
+    ports:
+      - "8888:8888"
+    depends_on:
+      - rabbitmq
+
+  discovery-service:
+    image: airtrack1234/discovery-service
+    container_name: discovery-service
+    ports:
+      - "8761:8761"
+    depends_on:
+      - rabbitmq
+      - config-service
+
+  api-gateway:
+    image: airtrack1234/api-gateway
+    container_name: api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - rabbitmq
+      - config-service
+      - discovery-service
+
+
+
+
+
+
+#
+#
+#  # discovery
+#  discovery-service:
+#    image: airtrack1234/discovery-service
+#    hostname: discovery-service
+#    ports:
+#      - "2181:2181"
+
