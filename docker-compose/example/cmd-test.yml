@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+
+  curl-test:
+    image: curlimages/curl
+    command: ["curl","-X","POST","-H","Content-type:application/json", "https://www.google.com"]
+
+#  sample-ubuntu:
+#    image: ubuntu:20.04
+#    command: [ "bash", "-c", "apt-get update && apt-get install -y net-tools && sleep 50000" ]
+
+      
+

@@ -4,7 +4,7 @@ services:
 
   ad-zookeeper:
     image: confluentinc/cp-zookeeper:7.1.2
-    hostname: zookeeper
+    hostname: ad-zookeeper
     container_name: ad-zookeeper
     ports:
       - "2181:2181"
@@ -14,7 +14,7 @@ services:
 
   ad-kafka:
     image: confluentinc/cp-kafka:7.1.2
-    hostname: kafka
+    hostname: ad-kafka
     container_name: ad-kafka
     depends_on:
       - ad-zookeeper
@@ -38,7 +38,7 @@ services:
 
   ad-kafka-connect:
     image: confluentinc/cp-kafka-connect:7.1.2
-    hostname: kafka-connect
+    hostname: ad-kafka-connect
     container_name: ad-kafka-connect
     depends_on:
       - ad-kafka
@@ -65,27 +65,29 @@ services:
       CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
       CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
     volumes:
-      - ${CONNECT_PATH}/components:/usr/share/confluent-hub-components
+      - ${CONNECT_PATH}/connector_plugins:/usr/share/confluent-hub-components
+      - ${CONNECT_PATH}/connector_configs:/usr/share/connector_configs
+      - ${CONNECT_PATH}/docker:/etc/confluent/docker
 
 
 
-#
-#
-#  elasticsearch:
-#    container_name: elasticsearch
-#    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.19
-#    restart: on-failure
-#    ports:
-#      - "9200:9200"
-#      - "9300:9300"
-#    environment:
-#      - discovery.type=single-node
-#      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-#    networks:
-#      - elastic
 
-#
-#
-#networks:
-#  elastic:
-#    external: true
+  ad-elasticsearch:
+    container_name: ad-elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.19
+    restart: on-failure
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+
+  ad-kibana:
+    container_name: ad-kibana
+    image: docker.elastic.co/kibana/kibana:7.17.19
+    restart: on-failure
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://ad-elasticsearch:9200
