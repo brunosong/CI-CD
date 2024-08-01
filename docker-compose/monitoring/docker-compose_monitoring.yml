@@ -4,11 +4,15 @@ services:
 
   prometheus:
     container_name: prometheus
-    build:
-      context: .
-      dockerfile: Dockerfile_prom
-    image: brunosong-prom
+#    build:
+#      context: .
+#      dockerfile: Dockerfile_prom
+    image: prom/prometheus
     restart: on-failure
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - ${PROM_PATH}:/etc/prometheus
     ports:
       - 9090:9090
     networks:
@@ -19,6 +23,8 @@ services:
     container_name: pushgateway
     image: prom/pushgateway
     restart: on-failure
+    environment:
+      - TZ=Asia/Seoul   # 어짜피 안먹음
     ports:
       - 9091:9091
     networks:

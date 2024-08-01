@@ -1,0 +1,9 @@
+version: '3.1'
+
+services:
+  api:
+    # Green은 새로운 버전이다.
+    image: airtrack1234/springboot-web:1.0
+    container_name: springboot-web-green
+    ports:
+      - '8081:8080'

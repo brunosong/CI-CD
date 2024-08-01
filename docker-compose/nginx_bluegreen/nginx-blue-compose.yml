@@ -1,0 +1,11 @@
+version: '3.1'
+
+services:
+  api:
+    # Blue 기존이 된다.
+    # image: airtrack1234/log-generator:${IMAGE_TAG}
+    # 실제로는 젠킨스로 ${IMAGE_TAG}를 달아줘야 한다. 이건 예제로 변경되는 과정만 본다.
+    image: airtrack1234/springboot-web:1.0
+    container_name: springboot-web-blue
+    ports:
+      - '8080:8080'
