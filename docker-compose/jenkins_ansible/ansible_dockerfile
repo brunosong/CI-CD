@@ -1,0 +1,10 @@
+FROM python:3.9-slim
+
+# Ansible 설치
+RUN apt-get update && \
+    apt-get install -y ansible && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# 작업 디렉터리 설정
+WORKDIR /ansible
